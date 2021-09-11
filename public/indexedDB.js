@@ -1,5 +1,4 @@
-const { response } = require("express");
-
+//Followed examples from class to create indexedDb file
 //Varibale to hold connection
 let db;
 
@@ -9,6 +8,7 @@ const request = indexedDB.open('budgetTracker' || 1);
 //Creating object store
 request.onupgradeneeded = ({ target }) => {
     const db = target.result;
+    //if there is no object store called 'budgetTrackerStore' create one
     if (!db.objectStoreNames.contains('budgetTrackerStore')) {
         db.createObjectStore('budgetTrackerStore', {autoIncrement: true });
     }
