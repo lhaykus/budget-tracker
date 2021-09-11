@@ -20,7 +20,6 @@ self.addEventListener('install', event => {
 
 //Activate
 self.addEventListener('activate', event => {
-    self.addEventListener('activate', event => {
         event.waitUntil(caches.keys().then(cacheName => {
             return Promise. all(
                 cacheName.map(key => {
@@ -33,6 +32,7 @@ self.addEventListener('activate', event => {
         }));
         self.clients.claim();
 });
+
 
 //Fetch
 self.addEventListener('fetch', event => {
