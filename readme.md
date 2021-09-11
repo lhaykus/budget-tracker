@@ -1,5 +1,7 @@
-# <h1 align='center'> Budget Tracker 💵 </h1>
+# <h1 align='center'> Online/Offline Budget Tracker 💵 </h1>
 <p align='center'> This simple app allows users to keep track of money transactions by adding and subtracting funds, while offline and online using service workers, manifest and indexedDB! </p>
+
+## Deployed on Heroku
 
 ## Table of Contents 
 - [Built With](#built-with)
