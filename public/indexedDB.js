@@ -1,4 +1,3 @@
-//Followed examples from class to create indexedDb file
 //Varibale to hold connection
 let db;
 
@@ -6,19 +5,15 @@ let db;
 const request = indexedDB.open('budgetTracker' || 1);
 
 //Creating object store
-request.onupgradeneeded = ({ target }) => {
-    const db = target.result;
-    //if there is no object store called 'budgetTrackerStore' create one
-    if (!db.objectStoreNames.contains('budgetTrackerStore')) {
-        db.createObjectStore('budgetTrackerStore', {autoIncrement: true });
-    }
+request.onupgradeneeded = function (event) {
+   const db = event.target.result;
+    db.createObjectStore('budgetTrackerStore', {autoIncrement: true });
 };
 
 //Create the onsuccess
 
-request.onsuccess = ({ target }) => {
-    console.log(request.result.name);
-    const db = request.result;
+request.onsuccess = function (event) {
+     db = event.target.result;
     //Check to see if app is online before reading from database
     if(navigator.onLine) {
         checkDatabase();
@@ -30,11 +25,22 @@ request.onerror = function (event) {
     console.log(event.target.errorCode);
 };
 
+//Function for when user submits new transaction offline to save their input
+const saveRecord = (record) => {
+    console.log('saving record invoked');
+    //creating transaction that can read and write on database
+    const transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
+    //Access object store
+    const store = transaction.objectStore('budgetTrackerStore');
+    //Add record to store
+    store.add(record);
+}
+
 //Checkdatabase function
 
 const checkDatabase = () => {
     //Opens a transaction of budgettracker database
-    let transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
+    const transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
     //Access the budgetstore
     const store = transaction.objectStore('budgetTrackerStore');
     //Get all records from store and set to a variable
@@ -52,7 +58,7 @@ const checkDatabase = () => {
                 },
             })
             .then((response) => response.json())
-            .then((res) => {
+            .then(() => {
     //If returned response is not empty open another transaction to budgetTrackerStore that can read and write 
                 if (res.length !== 0) {
                     transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
@@ -60,23 +66,13 @@ const checkDatabase = () => {
                     const currentStore = transaction.objectStore('budgetTrackerStore');
             //Clear exisiting entries when bulk add is successful
                     currentStore.clear();
-                    console.log('clearing store');
                 }
             });
         }
     };
 }
 
-//Function for when user submits new transaction offline to save their input
-const saveRecord = (record) => {
-    console.log('saving record invoked');
-    //creating transaction that can read and write on database
-    const transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
-    //Access object store
-    const store = transaction.objectStore('budgetTrackerStore');
-    //Add record to store
-    store.add(record);
-}
+
 
 //Listen for app to get back online
 window.addEventListener('online', checkDatabase);

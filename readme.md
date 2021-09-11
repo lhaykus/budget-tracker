@@ -2,6 +2,7 @@
 <p align='center'> This simple app allows users to keep track of money transactions by adding and subtracting funds, while offline and online using service workers, manifest and indexedDB! </p>
 
 ## Deployed on Heroku
+https://glacial-caverns-37746.herokuapp.com/
 
 ## Table of Contents 
 - [Built With](#built-with)
