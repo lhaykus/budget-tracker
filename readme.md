@@ -1,9 +1,9 @@
-## Budget Tracker
-This simple design and app allows users to keep track of money transactions while offline and online using service workers, manifest and indexedDB!
+# <h1 align='center'> Budget Tracker 💵 </h1>
+<p align='center'> This simple app allows users to keep track of money transactions by adding and subtracting funds, while offline and online using service workers, manifest and indexedDB! </p>
 
 ## Table of Contents 
-- [App View](#view)
 - [Built With](#built-with)
+- [App View](#view)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Credits](#credits)
