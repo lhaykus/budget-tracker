@@ -46,7 +46,7 @@
   <script src="indexedDB.js"></script>
   <!--Registering a service worker-->
   <script>
-    if ('serviceWoker' in navigator) {
+    if ('service-worker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-workers.js').then(req => {
           console.log('we found your service worker file!', req);

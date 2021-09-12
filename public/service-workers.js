@@ -1,4 +1,5 @@
 const STATIC_ASSETS = 'static-cache-v1';
+
 const DATA_CACHE_NAME = 'data-cache-v1';
 
 const staticAssets = [
@@ -40,6 +41,6 @@ self.addEventListener('activate', event => {
 //Fetch
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.match(event.request.url).then(response => response || fetch(event.request))
+        caches.match(event.request).then(response => response || fetch(event.request))
     )
 });

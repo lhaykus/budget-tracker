@@ -2,18 +2,22 @@
 let db;
 
 //Requesting a database instance
-const request = indexedDB.open('budgetTracker' || 1);
+const request = indexedDB.open('budget_tracker', 1);
 
 //Creating object store
 request.onupgradeneeded = function (event) {
    const db = event.target.result;
-    db.createObjectStore('budgetTrackerStore', {autoIncrement: true });
+   if (db.objectStoreNames.length === 0) {
+       //if no objectStore create one, autoincrement primary key
+    db.createObjectStore('BudgetStore', {autoIncrement: true });
+}
 };
 
 //Create the onsuccess
 
 request.onsuccess = function (event) {
      db = event.target.result;
+
     //Check to see if app is online before reading from database
     if(navigator.onLine) {
         checkDatabase();
@@ -29,20 +33,20 @@ request.onerror = function (event) {
 const saveRecord = (record) => {
     console.log('saving record invoked');
     //creating transaction that can read and write on database
-    const transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
+    const transaction = db.transaction(['BudgetStore'], 'readwrite');
     //Access object store
-    const store = transaction.objectStore('budgetTrackerStore');
+    const store = transaction.objectStore('BudgetStore');
     //Add record to store
     store.add(record);
-}
+};
 
 //Checkdatabase function
 
 const checkDatabase = () => {
     //Opens a transaction of budgettracker database
-    const transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
+    let transaction = db.transaction(['BudgetStore'], 'readwrite');
     //Access the budgetstore
-    const store = transaction.objectStore('budgetTrackerStore');
+    const store = transaction.objectStore('BudgetStore');
     //Get all records from store and set to a variable
     const getAll = store.getAll();
 
@@ -59,20 +63,21 @@ const checkDatabase = () => {
             })
             .then((response) => response.json())
             .then(() => {
-    //If returned response is not empty open another transaction to budgetTrackerStore that can read and write 
+    //If returned response is not empty open another transaction to BudgetStore that can read and write 
                 if (res.length !== 0) {
-                    transaction = db.transaction(['budgetTrackerStore'], 'readwrite');
+                    transaction = db.transaction(['BudgetStore'], 'readwrite');
             //Create variable for the current store
-                    const currentStore = transaction.objectStore('budgetTrackerStore');
+                    const currentStore = transaction.objectStore('BudgetStore');
             //Clear exisiting entries when bulk add is successful
                     currentStore.clear();
                 }
             });
         }
     };
-}
+};
 
 
 
 //Listen for app to get back online
 window.addEventListener('online', checkDatabase);
+
