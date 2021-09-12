@@ -1,6 +1,6 @@
 const STATIC_ASSETS = 'static-cache-v1';
 
-const DATA_CACHE_NAME = 'data-cache-v1';
+const DATA_CACHE_NAME = "data-cache-v1";
 
 const staticAssets = [
     '/',
@@ -8,39 +8,42 @@ const staticAssets = [
     '/manifest.webmanifest',
     '/styles.css',
     '/index.js',
-    '/icons/icon-192x192.png',
-    '/icons/icon=-512x512.png',
     '/indexedDB.js',
-
+    '/icons/icon-192x192.png',
+    '/icons/icon-512x512.png',
 ];
 
-//Install
+
+//Install Phase
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(STATIC_ASSETS).then(cache => cache.addAll(staticAssets)));
+        caches.open(STATIC_ASSETS).then(cache => cache.addAll(staticAssets))
+    );
     self.skipWaiting();
 });
 
-//Activate
-self.addEventListener('activate', event => {
-        event.waitUntil(
-            caches.keys().then(keyList => {
-            return Promise. all(
+//Activate Phase
+self.addEventListener("activate", event => {
+    event.waitUntil(
+        caches.keys().then(keyList => {
+            return Promise.all(
                 keyList.map(key => {
-                   if (key !== STATIC_ASSETS && key !== DATA_CACHE_NAME) {
-                       console.log('removing old cache data', key);
-                       return caches.delete(key);
-                   }
+                    //removing everything that isnt equal to what we are putting in 
+                    if (key !== STATIC_ASSETS && key !== DATA_CACHE_NAME) {
+                        console.log("Removing old cache data", key);
+                        return caches.delete(key);
+                    }
                 })
-            ); 
-        }));
-        self.clients.claim();
+            );
+        })
+    );
+    self.clients.claim();
 });
 
 
-//Fetch
-self.addEventListener('fetch', event => {
-    event.respondWith(
-        caches.match(event.request).then(response => response || fetch(event.request))
+//Fetching
+self.addEventListener('fetch', event =>{
+    event.respondWith( 
+        caches.match(event.request).then(response => response || fetch (event.request))
     )
 });
