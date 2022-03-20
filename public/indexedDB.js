@@ -13,8 +13,14 @@ request.onupgradeneeded = function (event) {
 }
 };
 
-//Create the onsuccess
+//If an error occurs, log the error
+request.onerror = function (event) {
+    console.log(event.target.errorCode);
+};
 
+
+
+//Create the onsuccess
 request.onsuccess = function (event) {
      db = event.target.result;
 
@@ -24,10 +30,7 @@ request.onsuccess = function (event) {
     }
 };
 
-//If an error occurs, log the error
-request.onerror = function (event) {
-    console.log(event.target.errorCode);
-};
+
 
 //Function for when user submits new transaction offline to save their input
 const saveRecord = (record) => {
